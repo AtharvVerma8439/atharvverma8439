@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Cool Photo Compressor</title>
   <style>
-    /* Cool Blue & Black Animated Background */
+    /* Reset & Font */
     * {
       box-sizing: border-box;
       margin: 0;
@@ -13,16 +13,16 @@
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     }
 
+    /* Animated Dark Blue Background */
     body {
       min-height: 100vh;
       display: flex;
       justify-content: center;
       align-items: center;
-      /* Black to Deep Blue Gradient */
       background: linear-gradient(-45deg, #000000, #0a192f, #0f172a, #000000);
       background-size: 400% 400%;
       animation: gradientBG 12s ease infinite;
-      color: #f8fafc;
+      color: #ffffff;
       padding: 40px 20px;
     }
 
@@ -32,91 +32,82 @@
       100% { background-position: 0% 50%; }
     }
 
-    /* Larger Glassmorphism Container for PC */
+    /* Main App Container */
     .container {
-      background: rgba(255, 255, 255, 0.03);
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
-      border: 1px solid rgba(255, 255, 255, 0.05);
-      border-radius: 24px;
+      background: rgba(255, 255, 255, 0.08); /* Brighter glass effect */
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 20px;
       padding: 50px 40px;
-      max-width: 650px; /* Increased width for computer screens */
+      max-width: 650px;
       width: 100%;
-      box-shadow: 0 10px 40px 0 rgba(0, 0, 0, 0.6);
       text-align: center;
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
     }
 
     h1 {
-      font-size: 2.8rem; /* Much larger heading */
-      margin-bottom: 12px;
-      /* Bright Blue Gradient Text */
-      background: linear-gradient(90deg, #38bdf8, #2563eb);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
+      font-size: 2.8rem;
+      margin-bottom: 10px;
+      color: #38bdf8;
     }
 
     p.subtitle {
-      font-size: 1.2rem; /* Larger subtitle */
-      color: #94a3b8;
-      margin-bottom: 35px;
+      font-size: 1.2rem;
+      color: #cbd5e1;
+      margin-bottom: 30px;
     }
 
+    /* Upload Area */
     .upload-box {
-      border: 2px dashed #38bdf8; /* Blue border */
-      border-radius: 16px;
-      padding: 50px 20px; /* Taller drag-and-drop box */
+      border: 2px dashed #38bdf8;
+      border-radius: 12px;
+      padding: 50px 20px;
       cursor: pointer;
-      transition: all 0.3s ease;
       background: rgba(56, 189, 248, 0.05);
+      transition: all 0.3s ease;
     }
 
     .upload-box:hover {
       background: rgba(56, 189, 248, 0.15);
-      border-color: #60a5fa;
     }
 
     .upload-box p {
-      color: #e2e8f0;
+      font-size: 1.3rem;
+      color: #ffffff;
       font-weight: 500;
-      font-size: 1.3rem; /* Larger upload text */
     }
 
     input[type="file"] {
       display: none;
     }
 
+    /* Image Preview */
     .preview-img {
       max-width: 100%;
-      max-height: 350px; /* Larger image preview */
+      max-height: 350px;
       border-radius: 12px;
       margin-top: 30px;
       display: none;
       object-fit: contain;
     }
 
+    /* Sliders and Stats */
     .controls {
       margin-top: 35px;
       display: none;
     }
 
-    .slider-group {
-      margin-bottom: 30px;
-      text-align: left;
-    }
-
     .slider-group label {
       display: flex;
       justify-content: space-between;
-      font-size: 1.1rem; /* Larger slider labels */
-      color: #cbd5e1;
+      font-size: 1.2rem;
       margin-bottom: 12px;
     }
 
     input[type="range"] {
       width: 100%;
-      accent-color: #38bdf8; /* Blue slider handle */
+      margin-bottom: 25px;
       cursor: pointer;
-      height: 8px; /* Thicker slider line */
     }
 
     .stats {
@@ -126,21 +117,149 @@
       padding: 20px;
       border-radius: 12px;
       margin-bottom: 30px;
-      font-size: 1.1rem; /* Larger stats text */
     }
 
     .stat-item span {
       display: block;
-      color: #38bdf8; /* Blue numbers */
+      color: #38bdf8;
+      font-size: 1.4rem;
       font-weight: bold;
-      font-size: 1.4rem; /* Much larger file size numbers */
       margin-top: 8px;
     }
 
+    /* Download Button */
     .download-btn {
       width: 100%;
-      padding: 18px; /* Taller button */
+      padding: 18px;
+      background: #2563eb;
+      color: white;
       border: none;
       border-radius: 12px;
-      /* Solid Blue Gradient Button */
-      background: linear-gradient
+      font-size: 1.3rem;
+      font-weight: bold;
+      cursor: pointer;
+      transition: 0.2s ease;
+    }
+
+    .download-btn:hover {
+      background: #1d4ed8;
+      transform: translateY(-2px);
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h1>⚡ Image Shrink</h1>
+    <p class="subtitle">Compress photos instantly in your browser</p>
+
+    <div class="upload-box" onclick="document.getElementById('imageInput').click()">
+      <p>📸 Click here to select a photo</p>
+      <input type="file" id="imageInput" accept="image/*">
+    </div>
+
+    <img id="preview" class="preview-img" alt="Preview">
+
+    <div class="controls" id="controls">
+      <div class="slider-group">
+        <label>
+          <span>Compression Level:</span>
+          <span id="qualityVal">70%</span>
+        </label>
+        <input type="range" id="qualitySlider" min="5" max="100" value="70">
+      </div>
+
+      <div class="stats">
+        <div class="stat-item">
+          Original Size
+          <span id="origSize">0 KB</span>
+        </div>
+        <div class="stat-item">
+          Compressed Size
+          <span id="compSize">0 KB</span>
+        </div>
+      </div>
+
+      <button class="download-btn" id="downloadBtn">Download Compressed Photo</button>
+    </div>
+  </div>
+
+  <script>
+    const imageInput = document.getElementById('imageInput');
+    const qualitySlider = document.getElementById('qualitySlider');
+    const qualityVal = document.getElementById('qualityVal');
+    const controls = document.getElementById('controls');
+    const preview = document.getElementById('preview');
+    const origSize = document.getElementById('origSize');
+    const compSize = document.getElementById('compSize');
+    const downloadBtn = document.getElementById('downloadBtn');
+
+    let originalFile = null;
+    let compressedBlob = null;
+
+    // Handle File Upload
+    imageInput.addEventListener('change', (e) => {
+      originalFile = e.target.files[0];
+      if (!originalFile) return;
+
+      origSize.textContent = formatBytes(originalFile.size);
+      
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        preview.src = event.target.result;
+        preview.style.display = 'block';
+        controls.style.display = 'block';
+        compressImage(); // Initial compression
+      };
+      reader.readAsDataURL(originalFile);
+    });
+
+    // Handle Slider Change
+    qualitySlider.addEventListener('input', () => {
+      qualityVal.textContent = `${qualitySlider.value}%`;
+      compressImage();
+    });
+
+    // Compress Logic
+    function compressImage() {
+      if (!originalFile) return;
+
+      const img = new Image();
+      img.src = preview.src;
+      img.onload = () => {
+        const canvas = document.createElement('canvas');
+        canvas.width = img.width;
+        canvas.height = img.height;
+
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+
+        const quality = qualitySlider.value / 100;
+
+        canvas.toBlob((blob) => {
+          compressedBlob = blob;
+          compSize.textContent = formatBytes(blob.size);
+        }, 'image/jpeg', quality);
+      };
+    }
+
+    // Handle Download
+    downloadBtn.addEventListener('click', () => {
+      if (!compressedBlob) return;
+      const link = document.createElement('a');
+      link.href = URL.createObjectURL(compressedBlob);
+      link.download = `compressed_${originalFile.name.split('.')[0]}.jpg`;
+      link.click();
+    });
+
+    // Utility: Format File Size
+    function formatBytes(bytes) {
+      if (bytes === 0) return '0 Bytes';
+      const k = 1024;
+      const sizes = ['Bytes', 'KB', 'MB'];
+      const i = Math.floor(Math.log(bytes) / Math.log(k));
+      return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+    }
+  </script>
+</body>
+</html>
